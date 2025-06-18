@@ -27,6 +27,7 @@ export type {
   TableColumn,
   Pagination,
   SearchParams,
+  SiteMenu,
   MenuItem,
   ValidationRule,
   ValidationResult,

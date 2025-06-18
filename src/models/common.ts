@@ -1,4 +1,4 @@
-// src/model/common.ts
+// src/models/common.ts
 
 // 페이지 모드
 export type PageMode = "list" | "create" | "edit" | "view";
@@ -71,6 +71,17 @@ export interface SearchParams {
   pageSize?: number;
   sortBy?: string;
   sortOrder?: "asc" | "desc";
+}
+
+// 메뉴 아이템 (실제 사이트 메뉴 구조)
+export interface SiteMenu {
+  id: number;
+  title: string;
+  level: number;
+  parentId: number | null;
+  icon?: string;
+  disabled?: boolean;
+  children?: SiteMenu[];
 }
 
 // 메뉴 아이템 (GNB에서 사용)
