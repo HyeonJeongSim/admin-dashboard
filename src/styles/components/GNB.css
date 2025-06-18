@@ -14,7 +14,7 @@
 
 .gnb-header {
   padding: 16px;
-  border-bottom: 1px solid #d1d5db;
+  border-bottom: 5px solid #ffffff1f;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -48,9 +48,8 @@
 /* 메뉴 아이템 */
 .gnb-menu-item {
   display: flex;
-  align-items: center;
-  gap: 15px;
-  font-size: 14px;
+  /* align-items: center; */
+  /* gap: 15px; */
   cursor: pointer;
   color: #fff;
   background-color: transparent;
@@ -58,17 +57,21 @@
   border-left: 3px solid transparent;
   -webkit-user-select: none;
   user-select: none;
-  width: 210px;
+  /* width: 210px; */
   margin: 0 auto;
+  font-weight: 600;
+  font-size: 16px;
+  justify-content: space-between;
 }
 
 .gnb-menu-item.parent {
-  padding: 12px 0;
+  padding: 0px 15px;
+  margin: 15px 0;
 }
 
-.gnb-menu-item.selected {
+/* .gnb-menu-item .selected {
   border-left-color: #fff;
-}
+} */
 
 .gnb-menu-item.child {
   padding: 8px 0;
@@ -79,10 +82,14 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
+  margin: 20px auto;
+  width: 80%;
 }
 
 .child .childText {
   padding-left: 10px;
+  font-weight: 500;
+  font-size: 13px;
 }
 
 .child:hover {
@@ -90,14 +97,13 @@
   color: #111;
 }
 
-.gnb-menu-item.selected {
-  color: #111;
-  background-color: #fff;
-}
+/* .gnb-menu-item.selected {
+  border-left-color: #fff;
+} */
 
-.gnb-menu-item.selected:hover {
+/* .gnb-menu-item.selected:hover {
   background-color: #fff;
-}
+} */
 
 /* 아이콘 */
 .gnb-chevron {

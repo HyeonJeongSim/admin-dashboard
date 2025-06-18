@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import menuData from "../../data/tree.json";
 import "../../styles/components/GNB.css";
+import "../../styles/common.css";
 
 interface GNBProps {
   isOpen?: boolean;
@@ -56,10 +57,17 @@ const GNB: React.FC<GNBProps> = ({
     setExpandedMenus(newExpanded);
   };
 
+  const [selectedParentId, setSelectedParentId] = useState<number | null>(null);
+
   const handleMenuSelect = (menu: any) => {
     if (menu.children && menu.children.length > 0) {
+      // 1뎁스 클릭시에만 selectedMenuId 업데이트
+      if (menu.level === 1 && onMenuSelect) {
+        onMenuSelect(menu.id);
+      }
       toggleMenu(menu.id);
     } else {
+      // 2뎁스는 별도 처리 (필요시)
       if (onMenuSelect) {
         onMenuSelect(menu.id);
       }
