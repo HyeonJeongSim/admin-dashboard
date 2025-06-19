@@ -13,7 +13,7 @@
 
 /* 등록 버튼 */
 .btn-register {
-  background-color: #212529;
+  background-color: #111;
   color: white;
   border: none;
   padding: 10px 30px;
@@ -21,11 +21,14 @@
   font-weight: 500;
   border-radius: 4px;
   cursor: pointer;
+  border: 1px solid #111;
   transition: background-color 0.2s;
 }
 
 .btn-register:hover {
-  background-color: #747474;
+  background-color: #fff;
+  color: #111;
+  border: 1px solid #111;
 }
 
 /* 테이블 컨테이너 */
@@ -134,5 +137,3 @@
   font-weight: 500;
   border-radius: 12px;
 }
-
-/* 스크롤바 */

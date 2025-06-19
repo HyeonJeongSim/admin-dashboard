@@ -71,7 +71,7 @@ function App() {
             <div className="company-form">
               <CompanyForm onCompanySelect={handleCompanySelect} />
             </div>
-            <div className="company-detail">
+            <div className="company-detail-wrap">
               <CompanyDetail company={getSelectedCompanyDetail()} />
             </div>
           </div>

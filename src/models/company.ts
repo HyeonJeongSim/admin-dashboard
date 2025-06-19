@@ -58,7 +58,7 @@ export interface CompanyDetail {
 
   // 기타
   note: string; // 비고
-  is_active: boolean; // 활성화 상태
+  is_active: boolean; // 주민기재분
 
   // 상품 정보 (선택적)
   product_code?: string; // 상품코드

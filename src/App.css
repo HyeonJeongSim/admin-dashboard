@@ -21,7 +21,6 @@
 
 .content-card {
   min-height: 500px;
-  width: 40%;
 }
 
 .content-title {
@@ -65,6 +64,11 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+.company-layout {
+  display: flex;
+  justify-content: space-between;
 }
 
 /* 상단 버튼 영역 */

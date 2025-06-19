@@ -1,0 +1,66 @@
+.company-detail-wrap {
+  width: 60%;
+}
+
+.company-detail {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 14px;
+  color: #333;
+  margin-top: 12px;
+}
+
+.company-detail td {
+  border: 1px solid #dcdcdc;
+  padding: 10px 12px;
+  vertical-align: middle;
+  word-break: break-word;
+}
+
+.company-detail tr td:nth-child(odd) {
+  background-color: #f4f4f4;
+  font-weight: 500;
+  color: #777;
+  /* width: 180px;
+  min-width: 120px; */
+}
+
+.company-detail tr td:nth-child(even) {
+  background-color: #fff;
+  /* width: 35%; */
+}
+
+.company-detail td[colspan="3"] {
+  background-color: #fff;
+  width: auto;
+}
+
+.company-detail tbody tr td > span {
+  color: red;
+  font-weight: 600;
+}
+
+/* 수정버튼 */
+
+.header-right {
+}
+
+.header-right .btn-edit {
+  background-color: #fff;
+  color: #111;
+  border: none;
+  padding: 10px 30px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #111;
+  transition: background-color 0.2s;
+}
+
+.header-right .btn-edit:hover {
+  background-color: #111;
+  color: #fff;
+  border: 1px solid #111;
+}
