@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import GNB from "./components/layout/GNB";
-// import Header from "./components/layout/Header";
+import { User, LogOut } from "lucide-react";
+
+import GNB from "./layout/GNB";
+import CompanyForm from "./components/company/CompanyForm";
+
 import menuData from "./data/tree.json";
 import "./App.css";
-import { User, LogOut } from "lucide-react";
+import "./styles/components/CompanyForm.css";
 
 function App() {
   const [selectedMenuId, setSelectedMenuId] = useState<number>(14);
@@ -31,10 +34,21 @@ function App() {
     return findMenu(menuData) || "관리자 대시보드";
   };
 
+  // 선택된 메뉴 ID에 따라 컴포넌트 렌더링
+  const renderMainContent = () => {
+    switch (selectedMenuId) {
+      case 14: // 거래처등록 메뉴 ID
+        return <CompanyForm />;
+      default:
+        return <div></div>;
+    }
+  };
+
   return (
     <div className="app-container">
       {/* 상단 고정 버튼 영역 */}
       <div className="top-bar">
+        <h2 className="content-title">{getMenuTitle(selectedMenuId)}</h2>
         <div className="top-bar-actions">
           <button
             className="top-bar-btn"
@@ -62,9 +76,7 @@ function App() {
 
         <div className="main-content-wrapper">
           <div className="main-content">
-            <div className="content-card">
-              <h2 className="content-title">{getMenuTitle(selectedMenuId)}</h2>
-            </div>
+            <div className="content-card">{renderMainContent()}</div>
           </div>
         </div>
       </div>

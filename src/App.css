@@ -20,18 +20,14 @@
 }
 
 .content-card {
-  background-color: #ffffff;
-  border-radius: 8px;
-  padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   min-height: 500px;
+  width: 40%;
 }
 
 .content-title {
   font-size: 24px;
   font-weight: 600;
   color: #1f2937;
-  margin-bottom: 16px;
 }
 
 .content-body {
@@ -78,6 +74,10 @@
   right: 0;
   padding: 16px 24px;
   z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 85%;
 }
 
 .top-bar-actions {

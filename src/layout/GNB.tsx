@@ -15,9 +15,9 @@ import {
   User,
   LogOut,
 } from "lucide-react";
-import menuData from "../../data/tree.json";
-import "../../styles/components/GNB.css";
-import "../../styles/common.css";
+import menuData from "../data/tree.json";
+import "../styles/components/GNB.css";
+import "../styles/common.css";
 
 interface GNBProps {
   isOpen?: boolean;
@@ -218,7 +218,6 @@ const GNB: React.FC<GNBProps> = ({
 
   return (
     <div className={`gnb-container ${isCollapsed ? "collapsed" : ""}`}>
-      {/* 헤더 영역 */}
       <div className="gnb-header">
         {!isCollapsed ? (
           // 펼친 상태: 제목과 X 버튼
