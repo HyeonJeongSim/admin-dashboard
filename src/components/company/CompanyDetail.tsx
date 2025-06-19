@@ -34,12 +34,12 @@ const CompanyDetail = ({ company }: Props) => {
         </button>
       </div>
 
-      {showEditModal && (
+      {/* {showEditModal && (
         <CompanyEdit
           company={company}
           onClose={() => setShowEditModal(false)}
         />
-      )}
+      )} */}
 
       <table className="company-detail">
         <tbody>

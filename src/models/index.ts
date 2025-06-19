@@ -6,8 +6,6 @@ export type {
   Company,
   CompanyDetail,
   CompanyFormData,
-  CompanySearchParams,
-  CompanyListResponse,
   BusinessStatus,
   BusinessStatusResponse,
   PostcodeSearchRequest,

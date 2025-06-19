@@ -120,22 +120,6 @@ export interface CompanyFormData {
   product_name?: string;
 }
 
-// 거래처 검색 조건
-export interface CompanySearchParams {
-  keyword?: string; // 검색 키워드
-  type?: CompanyType; // 거래처 유형
-  page?: number; // 페이지 번호
-  pageSize?: number; // 페이지 크기
-}
-
-// 거래처 목록 응답
-export interface CompanyListResponse {
-  companies: Company[];
-  total: number;
-  page: number;
-  pageSize: number;
-}
-
 // 사업자등록상태조회 관련 (brn.json 기준)
 export interface BusinessStatus {
   brn: string; // 사업자등록번호
