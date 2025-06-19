@@ -14,14 +14,16 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ onCompanySelect }) => {
   const [selectedCode, setSelectedCode] = useState<string>("");
   const [showRegisterModal, setShowRegisterModal] = useState<boolean>(false);
 
-  const companies: Company[] = clientsData.map((item, index) => ({
-    id: item.code, // code를 id로 사용
-    no: index + 1,
-    code: item.code,
-    brn: item.brn,
-    name: item.name,
-    type: item.type as CompanyType,
-  }));
+  const companies: Company[] = [...clientsData]
+    .sort((a, b) => a.code.localeCompare(b.code))
+    .map((item, index, array) => ({
+      id: item.code,
+      no: array.length - index, // 내림차순 부여
+      code: item.code,
+      brn: item.brn,
+      name: item.name,
+      type: item.type as CompanyType,
+    }));
 
   const handleRowClick = (company: Company) => {
     setSelectedCode(company.code);
