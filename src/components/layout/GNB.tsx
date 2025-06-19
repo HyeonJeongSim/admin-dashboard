@@ -90,22 +90,20 @@ const GNB: React.FC<GNBProps> = ({
     setSelectedParentId(parentId);
   }, [selectedMenuId]);
 
-  // 메뉴 선택 처리 함수
+  // GNB 메뉴 선택 처리 함수
   const handleMenuSelect = (menu: any) => {
-    if (menu.children && menu.children.length > 0) {
-      // 1뎁스 메뉴 클릭시
-      if (menu.level === 1) {
-        setSelectedParentId(menu.id); // 선택된 부모 메뉴 업데이트
-        if (onMenuSelect) {
-          onMenuSelect(menu.id);
-        }
-      }
-      toggleMenu(menu.id);
-    } else {
-      // 2뎁스 메뉴 클릭시
-      // 부모 메뉴는 유지하면서 선택된 메뉴만 업데이트
-      if (onMenuSelect) {
-        onMenuSelect(menu.id);
+    // 1뎁스든 2뎁스든 모두 선택 가능
+    if (onMenuSelect) {
+      onMenuSelect(menu.id);
+    }
+
+    // 1뎁스 메뉴인 경우
+    if (menu.level === 1) {
+      setSelectedParentId(menu.id);
+
+      // 펼쳐진 상태에서만 토글
+      if (!isCollapsed && menu.children?.length > 0) {
+        toggleMenu(menu.id);
       }
     }
   };
@@ -153,7 +151,7 @@ const GNB: React.FC<GNBProps> = ({
       <div key={menu.id}>
         <div
           className={menuItemClasses}
-          onClick={() => !isCollapsed && handleMenuSelect(menu)}
+          onClick={() => handleMenuSelect(menu)}
           onMouseEnter={() => handleParentHover(menu.id)}>
           {isParent ? (
             <>
