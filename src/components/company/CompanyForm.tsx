@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Company, CompanyType } from "../../models/company";
 import clientsData from "../../data/clients.json";
 
-import "../../styles/components/CompanyForm.css";
 import "../../styles/common.css";
+import "../../styles/components/CompanyForm.css";
 
 const CompanyForm = () => {
   // 체크된 항목들의 코드를 저장하는 배열

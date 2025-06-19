@@ -6,6 +6,7 @@ import CompanyForm from "./components/company/CompanyForm";
 
 import menuData from "./data/tree.json";
 import "./App.css";
+import "./styles/common.css";
 import "./styles/components/CompanyForm.css";
 
 function App() {

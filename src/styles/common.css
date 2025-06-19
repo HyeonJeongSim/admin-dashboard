@@ -13,3 +13,21 @@ body {
   line-height: 1.6;
   font-size: 14px;
 }
+
+/* 전체 스크롤바 */
+body::-webkit-scrollbar {
+  width: 12px;
+}
+
+body::-webkit-scrollbar-track {
+  background: blue;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #dee2e6;
+  border-radius: 6px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: #ced4da;
+}
