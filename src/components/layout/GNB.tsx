@@ -11,6 +11,9 @@ import {
   Building,
   Shield,
   Briefcase,
+  Menu,
+  User,
+  LogOut,
 } from "lucide-react";
 import menuData from "../../data/tree.json";
 import "../../styles/components/GNB.css";
@@ -35,6 +38,8 @@ const GNB: React.FC<GNBProps> = ({
 
   // 선택된 1뎁스 메뉴를 추적하는 상태 추가
   const [selectedParentId, setSelectedParentId] = useState<number | null>(null);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [hoveredParentId, setHoveredParentId] = useState<number | null>(null);
 
   // 메뉴 아이콘 매핑 함수
   const getMenuIcon = (menuId: number) => {
@@ -105,6 +110,27 @@ const GNB: React.FC<GNBProps> = ({
     }
   };
 
+  // GNB 접기/펼치기 토글
+  const toggleCollapse = () => {
+    setIsCollapsed(!isCollapsed);
+    setHoveredParentId(null); // 접기/펼칠 때 호버 상태 초기화
+  };
+
+  // 플로팅 메뉴 관련 상태 및 함수
+  const handleParentHover = (menuId: number) => {
+    if (isCollapsed) {
+      setHoveredParentId(menuId);
+    }
+  };
+
+  const handleFloatingMenuEnter = () => {
+    // 플로팅 메뉴에 마우스가 들어가면 유지
+  };
+
+  const handleFloatingMenuLeave = () => {
+    setHoveredParentId(null);
+  };
+
   // 메뉴 아이템 렌더링 함수
   const renderMenuItem = (menu: any) => {
     const hasChildren = menu.children && menu.children.length > 0;
@@ -125,32 +151,65 @@ const GNB: React.FC<GNBProps> = ({
 
     return (
       <div key={menu.id}>
-        <div className={menuItemClasses} onClick={() => handleMenuSelect(menu)}>
-          {/* 1뎁스 메뉴 구조 수정 */}
+        <div
+          className={menuItemClasses}
+          onClick={() => !isCollapsed && handleMenuSelect(menu)}
+          onMouseEnter={() => handleParentHover(menu.id)}>
           {isParent ? (
             <>
               <div className="menu-content">
                 <span className="menu-icon">{getMenuIcon(menu.id)}</span>
-                <span className="menu-text">{menu.title}</span>
+                {!isCollapsed && (
+                  <span className="menu-text">{menu.title}</span>
+                )}
               </div>
-              {hasChildren && (
+              {!isCollapsed && hasChildren && (
                 <span className="arrow">
                   {isExpanded ? <ChevronUp /> : <ChevronDown />}
                 </span>
               )}
             </>
           ) : (
-            // 2뎁스 메뉴는 기존대로
             <span className="childText">{menu.title}</span>
           )}
         </div>
 
         {/* 하위 메뉴 렌더링 */}
-        {hasChildren && isExpanded && (
-          <div className="childList">
-            {menu.children?.map((child: any) => renderMenuItem(child))}
-          </div>
-        )}
+        {!isCollapsed &&
+          hasChildren &&
+          isExpanded && ( // isCollapsed 체크 추가
+            <div className="childList">
+              {menu.children?.map((child: any) => renderMenuItem(child))}
+            </div>
+          )}
+
+        {/* 접힌 상태에서 호버시 나타나는 플로팅 메뉴 */}
+        {isCollapsed &&
+          isParent &&
+          hoveredParentId === menu.id &&
+          hasChildren && (
+            <div
+              className="floating-menu"
+              onMouseEnter={handleFloatingMenuEnter}
+              onMouseLeave={handleFloatingMenuLeave}>
+              <div className="floating-menu-title">{menu.title}</div>
+              <div className="floating-menu-items">
+                {menu.children?.map((child: any) => (
+                  <div
+                    key={child.id}
+                    className={`floating-menu-item ${
+                      selectedMenuId === child.id ? "selected" : ""
+                    }`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleMenuSelect(child);
+                    }}>
+                    {child.title}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
       </div>
     );
   };
@@ -160,16 +219,26 @@ const GNB: React.FC<GNBProps> = ({
   }
 
   return (
-    <div className="gnb-container">
+    <div className={`gnb-container ${isCollapsed ? "collapsed" : ""}`}>
+      {/* 헤더 영역 */}
       <div className="gnb-header">
-        <h1 className="gnb-title">전체 메뉴</h1>
-        {onClose && (
-          <button className="gnb-close-button" onClick={onClose}>
-            <X />
+        {!isCollapsed ? (
+          // 펼친 상태: 제목과 X 버튼
+          <>
+            <h1 className="gnb-title">전체 메뉴</h1>
+            <button className="gnb-close-button" onClick={toggleCollapse}>
+              <X />
+            </button>
+          </>
+        ) : (
+          // 접힌 상태: 햄버거 메뉴만
+          <button className="gnb-toggle-button" onClick={toggleCollapse}>
+            <Menu />
           </button>
         )}
       </div>
 
+      {/* 메뉴 리스트 */}
       <div className="gnb-menu-list">
         {menuData.map((menu: any) => renderMenuItem(menu))}
       </div>

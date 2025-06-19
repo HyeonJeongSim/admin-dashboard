@@ -3,6 +3,7 @@ import GNB from "./components/layout/GNB";
 // import Header from "./components/layout/Header";
 import menuData from "./data/tree.json";
 import "./App.css";
+import { User, LogOut } from "lucide-react";
 
 function App() {
   const [selectedMenuId, setSelectedMenuId] = useState<number>(14);
@@ -32,19 +33,38 @@ function App() {
 
   return (
     <div className="app-container">
-      <GNB
-        isOpen={showGNB}
-        onClose={() => setShowGNB(false)}
-        onMenuSelect={handleMenuSelect}
-        selectedMenuId={selectedMenuId}
-      />
+      {/* 상단 고정 버튼 영역 */}
+      <div className="top-bar">
+        <div className="top-bar-actions">
+          <button
+            className="top-bar-btn"
+            onClick={() => console.log("마이페이지 클릭")}>
+            <User size={16} />
+            <span>마이페이지</span>
+          </button>
+          <button
+            className="top-bar-btn"
+            onClick={() => console.log("로그아웃 클릭")}>
+            <LogOut size={16} />
+            <span>로그아웃</span>
+          </button>
+        </div>
+      </div>
 
-      <div className="main-content-wrapper">
-        {/* <Header title={getMenuTitle(selectedMenuId)} /> */}
+      {/* 메인 레이아웃 */}
+      <div className="app-layout">
+        <GNB
+          isOpen={showGNB}
+          onClose={() => setShowGNB(false)}
+          onMenuSelect={handleMenuSelect}
+          selectedMenuId={selectedMenuId}
+        />
 
-        <div className="main-content">
-          <div className="content-card">
-            <h2 className="content-title">{getMenuTitle(selectedMenuId)}</h2>
+        <div className="main-content-wrapper">
+          <div className="main-content">
+            <div className="content-card">
+              <h2 className="content-title">{getMenuTitle(selectedMenuId)}</h2>
+            </div>
           </div>
         </div>
       </div>
