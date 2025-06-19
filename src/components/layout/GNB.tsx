@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ChevronDown,
   ChevronUp,
@@ -33,6 +33,10 @@ const GNB: React.FC<GNBProps> = ({
     new Set([12])
   );
 
+  // 선택된 1뎁스 메뉴를 추적하는 상태 추가
+  const [selectedParentId, setSelectedParentId] = useState<number | null>(null);
+
+  // 메뉴 아이콘 매핑 함수
   const getMenuIcon = (menuId: number) => {
     const iconMap: Record<number, React.ReactNode> = {
       1: <FileText />,
@@ -47,6 +51,7 @@ const GNB: React.FC<GNBProps> = ({
     return iconMap[menuId] || null;
   };
 
+  // 메뉴 토글 함수
   const toggleMenu = (menuId: number) => {
     const newExpanded = new Set(expandedMenus);
     if (newExpanded.has(menuId)) {
@@ -57,33 +62,63 @@ const GNB: React.FC<GNBProps> = ({
     setExpandedMenus(newExpanded);
   };
 
-  const [selectedParentId, setSelectedParentId] = useState<number | null>(null);
+  // 선택된 메뉴 ID로부터 부모 메뉴 ID 찾기
+  const findParentMenuId = (menuId: number, menus: any[]): number | null => {
+    for (const menu of menus) {
+      if (menu.id === menuId && menu.level === 1) {
+        return menu.id; // 1뎁스 메뉴인 경우 자기 자신 반환
+      }
+      if (menu.children) {
+        for (const child of menu.children) {
+          if (child.id === menuId) {
+            return menu.id; // 부모 메뉴 ID 반환
+          }
+        }
+      }
+    }
+    return null;
+  };
 
+  // selectedMenuId가 변경될 때 부모 메뉴 ID 업데이트
+  useEffect(() => {
+    const parentId = findParentMenuId(selectedMenuId || 14, menuData);
+    setSelectedParentId(parentId);
+  }, [selectedMenuId]);
+
+  // 메뉴 선택 처리 함수
   const handleMenuSelect = (menu: any) => {
     if (menu.children && menu.children.length > 0) {
-      // 1뎁스 클릭시에만 selectedMenuId 업데이트
-      if (menu.level === 1 && onMenuSelect) {
-        onMenuSelect(menu.id);
+      // 1뎁스 메뉴 클릭시
+      if (menu.level === 1) {
+        setSelectedParentId(menu.id); // 선택된 부모 메뉴 업데이트
+        if (onMenuSelect) {
+          onMenuSelect(menu.id);
+        }
       }
       toggleMenu(menu.id);
     } else {
-      // 2뎁스는 별도 처리 (필요시)
+      // 2뎁스 메뉴 클릭시
+      // 부모 메뉴는 유지하면서 선택된 메뉴만 업데이트
       if (onMenuSelect) {
         onMenuSelect(menu.id);
       }
     }
   };
 
+  // 메뉴 아이템 렌더링 함수
   const renderMenuItem = (menu: any) => {
     const hasChildren = menu.children && menu.children.length > 0;
     const isExpanded = expandedMenus.has(menu.id);
     const isSelected = selectedMenuId === menu.id;
     const isParent = menu.level === 1;
+    const isSelectedParent = selectedParentId === menu.id; // 선택된 부모인지 확인
 
+    // 클래스 이름 조합
     const menuItemClasses = [
       "gnb-menu-item",
       isParent ? "parent" : "child",
       isSelected ? "selected" : "",
+      isSelectedParent ? "selected-parent" : "", // 선택된 부모 클래스 추가
     ]
       .filter(Boolean)
       .join(" ");
@@ -91,16 +126,26 @@ const GNB: React.FC<GNBProps> = ({
     return (
       <div key={menu.id}>
         <div className={menuItemClasses} onClick={() => handleMenuSelect(menu)}>
-          {!hasChildren && menu.level > 1}
-          {menu.level === 1 && <span>{getMenuIcon(menu.id)}</span>}
-          <span className="childText">{menu.title}</span>
-          {hasChildren && (
-            <span className="arrow">
-              {isExpanded ? <ChevronUp /> : <ChevronDown />}
-            </span>
+          {/* 1뎁스 메뉴 구조 수정 */}
+          {isParent ? (
+            <>
+              <div className="menu-content">
+                <span className="menu-icon">{getMenuIcon(menu.id)}</span>
+                <span className="menu-text">{menu.title}</span>
+              </div>
+              {hasChildren && (
+                <span className="arrow">
+                  {isExpanded ? <ChevronUp /> : <ChevronDown />}
+                </span>
+              )}
+            </>
+          ) : (
+            // 2뎁스 메뉴는 기존대로
+            <span className="childText">{menu.title}</span>
           )}
         </div>
 
+        {/* 하위 메뉴 렌더링 */}
         {hasChildren && isExpanded && (
           <div className="childList">
             {menu.children?.map((child: any) => renderMenuItem(child))}
