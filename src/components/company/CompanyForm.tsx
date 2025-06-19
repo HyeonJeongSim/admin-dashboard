@@ -5,22 +5,29 @@ import clientsData from "../../data/clients.json";
 import "../../styles/common.css";
 import "../../styles/components/CompanyForm.css";
 
-const CompanyForm = () => {
-  // 체크된 항목들의 코드를 저장하는 배열
+interface CompanyFormProps {
+  onCompanySelect: (companyCode: string) => void;
+}
+
+const CompanyForm: React.FC<CompanyFormProps> = ({ onCompanySelect }) => {
   const [checkedCodes, setCheckedCodes] = useState<string[]>([]);
-  // 선택된 행의 코드
   const [selectedCode, setSelectedCode] = useState<string>("");
   const [showRegisterModal, setShowRegisterModal] = useState<boolean>(false);
 
-  // clients.json 데이터를 Company 타입으로 변환 (id와 no 추가)
   const companies: Company[] = clientsData.map((item, index) => ({
     id: item.code, // code를 id로 사용
-    no: index + 1, // 순번은 index + 1
+    no: index + 1,
     code: item.code,
     brn: item.brn,
     name: item.name,
     type: item.type as CompanyType,
   }));
+
+  const handleRowClick = (company: Company) => {
+    setSelectedCode(company.code);
+    // onCompanySelect(Number(company.id));
+    onCompanySelect(company.code);
+  };
 
   // 전체 선택/해제
   const toggleAll = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,7 +62,7 @@ const CompanyForm = () => {
   // 등록 버튼 클릭
   const handleRegisterClick = () => {
     setShowRegisterModal(true);
-    // 나중에 여기서 등록 컴포넌트를 표시하거나 라우팅
+    //  여기서 등록 컴포넌트를 표시하거나 라우팅
   };
 
   return (
@@ -94,7 +101,7 @@ const CompanyForm = () => {
               <tr
                 key={company.code}
                 className={selectedCode === company.code ? "selected" : ""}
-                onClick={() => setSelectedCode(company.code)}>
+                onClick={() => handleRowClick(company)}>
                 <td className="td-no">{company.no}</td>
                 <td className="td-checkbox">
                   <input

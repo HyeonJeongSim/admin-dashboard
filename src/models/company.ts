@@ -17,6 +17,7 @@ export interface Company {
 // 거래처 상세 정보 (companies.json 기준)
 export interface CompanyDetail {
   // 기본 정보
+  id: number;
   brn: string; // 사업자등록번호
   resident_registration_number: string; // 주민등록번호
   ceo_name: string; // 대표자명
