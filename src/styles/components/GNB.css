@@ -193,19 +193,17 @@
 /* 플로팅 메뉴 (접힌 상태에서 호버시 표시) */
 .floating-menu {
   position: absolute;
-  left: calc(100% + 5px);
+  left: calc(100% + 15px);
   top: 0;
-  transform: translateY(0);
   background-color: #111;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
   min-width: 200px;
+  max-width: 300px;
   z-index: 999;
-  margin-left: 8px;
   animation: fadeIn 0.2s ease;
-  padding-left: 13px;
 }
 
 .collapsed .gnb-menu-list {
@@ -228,7 +226,7 @@
 .floating-menu-title {
   padding: 12px 16px;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 18px;
   color: #fff;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -238,21 +236,24 @@
 }
 
 .floating-menu-item {
-  padding: 8px 16px;
-  font-size: 13px;
+  padding: 8px 10px;
+  font-size: 16px;
+  font-weight: 400;
   color: #fff;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.1s ease-in-out;
+  margin: 0 10px;
+  white-space: nowrap;
 }
 
 .floating-menu-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  font-weight: 600; /* 호버시 bold 효과 */
+  font-weight: 600;
+  transition: all 0.1s ease-in-out;
 }
 
 .floating-menu-item.selected {
-  font-weight: 600; /* 현재 페이지 bold 처리 */
-  background-color: rgba(255, 255, 255, 0.05);
+  font-weight: 600;
+  transition: all 0.1s ease-in-out;
 }
 
 /* 스크롤바 스타일 */
