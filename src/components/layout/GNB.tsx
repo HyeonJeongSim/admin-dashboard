@@ -172,6 +172,34 @@ const GNB: React.FC<GNBProps> = ({
           ) : (
             <span className="childText">{menu.title}</span>
           )}
+
+          {/* 접힌 상태에서 호버시 나타나는 플로팅 메뉴 */}
+          {isCollapsed &&
+            isParent &&
+            hoveredParentId === menu.id &&
+            hasChildren && (
+              <div
+                className="floating-menu"
+                onMouseEnter={handleFloatingMenuEnter}
+                onMouseLeave={handleFloatingMenuLeave}>
+                <div className="floating-menu-title">{menu.title}</div>
+                <div className="floating-menu-items">
+                  {menu.children?.map((child: any) => (
+                    <div
+                      key={child.id}
+                      className={`floating-menu-item ${
+                        selectedMenuId === child.id ? "selected" : ""
+                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleMenuSelect(child);
+                      }}>
+                      {child.title}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
         </div>
 
         {/* 하위 메뉴 렌더링 */}
@@ -180,34 +208,6 @@ const GNB: React.FC<GNBProps> = ({
           isExpanded && ( // isCollapsed 체크 추가
             <div className="childList">
               {menu.children?.map((child: any) => renderMenuItem(child))}
-            </div>
-          )}
-
-        {/* 접힌 상태에서 호버시 나타나는 플로팅 메뉴 */}
-        {isCollapsed &&
-          isParent &&
-          hoveredParentId === menu.id &&
-          hasChildren && (
-            <div
-              className="floating-menu"
-              onMouseEnter={handleFloatingMenuEnter}
-              onMouseLeave={handleFloatingMenuLeave}>
-              <div className="floating-menu-title">{menu.title}</div>
-              <div className="floating-menu-items">
-                {menu.children?.map((child: any) => (
-                  <div
-                    key={child.id}
-                    className={`floating-menu-item ${
-                      selectedMenuId === child.id ? "selected" : ""
-                    }`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleMenuSelect(child);
-                    }}>
-                    {child.title}
-                  </div>
-                ))}
-              </div>
             </div>
           )}
       </div>

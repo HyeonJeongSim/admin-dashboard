@@ -23,6 +23,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 80px;
 }
 
 .collapsed .gnb-header {
@@ -95,7 +96,8 @@
 .gnb-menu-item.parent {
   padding: 8px 15px;
   margin: 8px 0;
-  justify-content: space-between; /* 컨텐츠와 화살표 분리 */
+  justify-content: space-between;
+  position: relative;
 }
 
 /* 선택된 1뎁스 메뉴 인디케이터 */
@@ -104,7 +106,6 @@
 }
 
 .menu-item-container {
-  position: relative;
 }
 
 /* 메뉴 컨텐츠 (아이콘 + 텍스트) */
@@ -192,28 +193,35 @@
 /* 플로팅 메뉴 (접힌 상태에서 호버시 표시) */
 .floating-menu {
   position: absolute;
-  left: 100%;
+  left: calc(100% + 5px);
   top: 0;
+  transform: translateY(0);
   background-color: #111;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
   min-width: 200px;
-  z-index: 100;
+  z-index: 999;
   margin-left: 8px;
   animation: fadeIn 0.2s ease;
   padding-left: 13px;
 }
 
+.collapsed .gnb-menu-list {
+  overflow: visible;
+}
+
+.collapsed.gnb-container {
+  overflow: visible;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateX(-10px);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
   }
 }
 
