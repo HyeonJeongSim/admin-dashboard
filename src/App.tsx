@@ -4,8 +4,12 @@ import { User, LogOut } from "lucide-react";
 import GNB from "./layout/GNB";
 import CompanyForm from "./components/company/CompanyForm";
 import CompanyDetail from "./components/company/CompanyDetail";
+import CompanyEdit from "./components/company/CompanyEdit";
 
-import { CompanyDetail as CompanyDetailType } from "./models/company";
+import {
+  CompanyDetail as CompanyDetailType,
+  CompanyFormData as CompanyFormDataType,
+} from "./models/company";
 
 import menuData from "./data/tree.json";
 import clients from "./data/clients.json";
@@ -22,30 +26,45 @@ function App() {
     null
   );
 
+  const [mode, setMode] = useState<"view" | "edit">("view");
+
   const handleMenuSelect = (menuId: number) => {
     setSelectedMenuId(menuId);
+    setMode("view");
+    setSelectedClientCode(null);
   };
 
   // CompanyForm에서 선택된 client의 "code"를 기준으로 저장
   const handleCompanySelect = (companyCode: string) => {
     setSelectedClientCode(companyCode);
+    setMode("view");
+  };
+
+  const handleEditClick = () => {
+    setMode("edit");
+  };
+
+  const handleCancelEdit = () => {
+    setMode("view");
+  };
+
+  const handleSaveEdit = (updatedCompany: CompanyFormDataType) => {
+    console.log("저장된 회사 정보:", updatedCompany);
+    setMode("view");
   };
 
   // companies.json에서 code가 같은 항목을 찾음
   const getSelectedCompanyDetail = (): CompanyDetailType | null => {
     if (!selectedClientCode) return null;
 
-    // companies.json에는 code가 없으므로 미리 매핑
     const mappedCompanies: (CompanyDetailType & { code: string })[] =
       companies.map((item, index) => ({
         ...item,
         id: index + 1,
-        code: clients[index]?.code ?? "", // ✅ clients.json에서 같은 index의 code 매핑
+        code: clients[index]?.code ?? "", // clients.json에서 같은 index의 code 매핑
       }));
 
-    const found =
-      mappedCompanies.find((c) => c.code === selectedClientCode) || null;
-    return found;
+    return mappedCompanies.find((c) => c.code === selectedClientCode) || null;
   };
 
   const getMenuTitle = (menuId: number): string => {
@@ -72,10 +91,17 @@ function App() {
               <CompanyForm onCompanySelect={handleCompanySelect} />
             </div>
             <div className="company-detail-wrap">
-              <CompanyDetail company={getSelectedCompanyDetail()} />
+              <CompanyDetail
+                company={getSelectedCompanyDetail()}
+                mode={mode}
+                onEditClick={handleEditClick}
+                onCancelEdit={handleCancelEdit}
+                onSaveEdit={handleSaveEdit}
+              />
             </div>
           </div>
         );
+
       default:
         return <div></div>;
     }

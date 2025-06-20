@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
 import type { CompanyFormData, CompanyDetail } from "../../models/company";
-import companiesData from "../../data/companies.json";
 import "../../styles/components/CompanyDetail.css";
 
-interface Props {
-  company: CompanyFormData;
-  onClose: () => void;
-}
-
 interface CompanyEditProps {
-  code: string;
-  onSave: (updated: CompanyFormData) => void;
+  company: CompanyDetail | null;
+  onCancel: () => void;
+  onSave: (updatedCompany: CompanyFormData) => void;
 }
 
 const formatWithHyphen = (
@@ -29,33 +24,34 @@ const formatCurrency = (value: string) => {
   return isNaN(num) ? "" : num.toLocaleString();
 };
 
-const CompanyEdit: React.FC<CompanyEditProps> = ({ code, onSave }) => {
-  const [company, setCompany] = useState<CompanyFormData | null>(null);
+const CompanyEdit: React.FC<CompanyEditProps> = ({
+  company,
+  onCancel,
+  onSave,
+}) => {
+  const [formData, setFormData] = useState<CompanyFormData | null>(null);
 
   useEffect(() => {
-    const found = (companiesData as unknown as CompanyDetail[]).find(
-      (c) => c.brn === code
-    );
-    if (found)
-      setCompany({
-        ...found,
-        code: "",
-        name: "",
-        type: "매입",
+    if (company) {
+      setFormData({
+        ...company,
+        code: company.code ?? "",
+        name: company.ceo_name ?? "",
+        type: "매입", // 필요 시 변경
       });
-  }, [code]);
+    }
+  }, [company]);
+
+  if (!formData) return <div>로딩 중...</div>;
 
   const handleChange = (field: keyof CompanyFormData, value: any) => {
-    if (!company) return;
-    setCompany({ ...company, [field]: value });
+    setFormData({ ...formData, [field]: value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (company) onSave(company);
+    if (formData) onSave(formData);
   };
-
-  if (!company) return <div>로딩 중...</div>;
 
   return (
     <form className="company-detail-form" onSubmit={handleSubmit}>
@@ -65,7 +61,7 @@ const CompanyEdit: React.FC<CompanyEditProps> = ({ code, onSave }) => {
             <td>사업자등록번호*</td>
             <td colSpan={3}>
               <input
-                value={formatWithHyphen(company.brn || "", "biz")}
+                value={formatWithHyphen(formData.brn || "", "biz")}
                 onChange={(e) => handleChange("brn", e.target.value)}
               />
             </td>
@@ -75,7 +71,7 @@ const CompanyEdit: React.FC<CompanyEditProps> = ({ code, onSave }) => {
             <td>
               <input
                 value={formatWithHyphen(
-                  company.resident_registration_number || "",
+                  formData.resident_registration_number || "",
                   "personal"
                 )}
                 onChange={(e) =>
@@ -86,7 +82,7 @@ const CompanyEdit: React.FC<CompanyEditProps> = ({ code, onSave }) => {
             <td>주민기재분*</td>
             <td>
               <select
-                value={company.is_active ? "1" : "0"}
+                value={formData.is_active ? "1" : "0"}
                 onChange={(e) =>
                   handleChange("is_active", e.target.value === "1")
                 }>
@@ -99,7 +95,7 @@ const CompanyEdit: React.FC<CompanyEditProps> = ({ code, onSave }) => {
             <td>대표자 성명*</td>
             <td>
               <input
-                value={company.ceo_name || ""}
+                value={formData.ceo_name || ""}
                 onChange={(e) => handleChange("ceo_name", e.target.value)}
               />
             </td>
@@ -107,7 +103,7 @@ const CompanyEdit: React.FC<CompanyEditProps> = ({ code, onSave }) => {
             <td>
               <input
                 type="number"
-                value={company.sub_business_number || ""}
+                value={formData.sub_business_number || ""}
                 onChange={(e) =>
                   handleChange("sub_business_number", Number(e.target.value))
                 }
@@ -118,14 +114,14 @@ const CompanyEdit: React.FC<CompanyEditProps> = ({ code, onSave }) => {
             <td>업종*</td>
             <td>
               <input
-                value={company.business_type || ""}
+                value={formData.business_type || ""}
                 onChange={(e) => handleChange("business_type", e.target.value)}
               />
             </td>
             <td>종목*</td>
             <td>
               <input
-                value={company.item || ""}
+                value={formData.item || ""}
                 onChange={(e) => handleChange("item", e.target.value)}
               />
             </td>
@@ -133,21 +129,21 @@ const CompanyEdit: React.FC<CompanyEditProps> = ({ code, onSave }) => {
           <tr>
             <td>주소*</td>
             <td colSpan={3}>
-              ({company.zipcode}) {company.address}
+              ({formData.zipcode}) {formData.address}
             </td>
           </tr>
           <tr>
             <td>연락처</td>
             <td>
               <input
-                value={formatWithHyphen(company.phone || "", "phone")}
+                value={formatWithHyphen(formData.phone || "", "phone")}
                 onChange={(e) => handleChange("phone", e.target.value)}
               />
             </td>
             <td>팩스번호</td>
             <td>
               <input
-                value={formatWithHyphen(company.fax || "", "phone")}
+                value={formatWithHyphen(formData.fax || "", "phone")}
                 onChange={(e) => handleChange("fax", e.target.value)}
               />
             </td>
@@ -155,14 +151,14 @@ const CompanyEdit: React.FC<CompanyEditProps> = ({ code, onSave }) => {
           <tr>
             <td>담당(부서)사원</td>
             <td colSpan={3}>
-              {company.department} / {company.manager}
+              {formData.department} / {formData.manager}
             </td>
           </tr>
           <tr>
             <td>인쇄할거래처명</td>
             <td colSpan={3}>
               <input
-                value={company.printable_company_name || ""}
+                value={formData.printable_company_name || ""}
                 onChange={(e) =>
                   handleChange("printable_company_name", e.target.value)
                 }
@@ -173,7 +169,7 @@ const CompanyEdit: React.FC<CompanyEditProps> = ({ code, onSave }) => {
             <td>담보설정액</td>
             <td>
               <input
-                value={formatCurrency(company.guarantee_amount || "")}
+                value={formatCurrency(formData.guarantee_amount || "")}
                 onChange={(e) =>
                   handleChange("guarantee_amount", e.target.value)
                 }
@@ -183,7 +179,7 @@ const CompanyEdit: React.FC<CompanyEditProps> = ({ code, onSave }) => {
             <td>여신한도액</td>
             <td>
               <input
-                value={formatCurrency(company.credit_limit || "")}
+                value={formatCurrency(formData.credit_limit || "")}
                 onChange={(e) => handleChange("credit_limit", e.target.value)}
               />
               원
@@ -192,15 +188,15 @@ const CompanyEdit: React.FC<CompanyEditProps> = ({ code, onSave }) => {
           <tr>
             <td>입금 계좌 번호</td>
             <td colSpan={3}>
-              {company.bank} / {company.account_holder} /{" "}
-              {company.account_number}
+              {formData.bank} / {formData.account_holder} /{" "}
+              {formData.account_number}
             </td>
           </tr>
           <tr>
             <td>업체담당자이메일</td>
             <td colSpan={3}>
               <input
-                value={company.email || ""}
+                value={formData.email || ""}
                 onChange={(e) => handleChange("email", e.target.value)}
               />
             </td>
@@ -208,30 +204,26 @@ const CompanyEdit: React.FC<CompanyEditProps> = ({ code, onSave }) => {
           <tr>
             <td>거래처 분류명</td>
             <td colSpan={3}>
-              {company.category1} / {company.category2}
+              {formData.category1} / {formData.category2}
             </td>
           </tr>
           <tr>
             <td>거래시작(종료)일</td>
             <td colSpan={3}>
-              {company.contract_start} ~ {company.contract_end}
+              {formData.contract_start} ~ {formData.contract_end}
             </td>
           </tr>
           <tr>
             <td>비고</td>
             <td colSpan={3}>
               <textarea
-                value={company.note || ""}
+                value={formData.note || ""}
                 onChange={(e) => handleChange("note", e.target.value)}
               />
             </td>
           </tr>
         </tbody>
       </table>
-
-      <div className="form-actions">
-        <button type="submit">저장</button>
-      </div>
     </form>
   );
 };

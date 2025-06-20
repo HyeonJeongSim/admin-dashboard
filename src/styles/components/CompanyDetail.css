@@ -40,27 +40,3 @@
   color: red;
   font-weight: 600;
 }
-
-/* 수정버튼 */
-
-.header-right {
-}
-
-.header-right .btn-edit {
-  background-color: #fff;
-  color: #111;
-  border: none;
-  padding: 10px 30px;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 4px;
-  cursor: pointer;
-  border: 1px solid #111;
-  transition: background-color 0.2s;
-}
-
-.header-right .btn-edit:hover {
-  background-color: #111;
-  color: #fff;
-  border: 1px solid #111;
-}

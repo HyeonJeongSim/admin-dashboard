@@ -22,6 +22,7 @@ export interface CompanyDetail {
   resident_registration_number: string; // 주민등록번호
   ceo_name: string; // 대표자명
   sub_business_number: number; // 종사업장번호
+  code?: string;
 
   // 업종/업태 정보
   business_type: string; // 업종

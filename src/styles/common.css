@@ -13,3 +13,52 @@ body {
   line-height: 1.6;
   font-size: 14px;
 }
+
+/* 등록,수정,삭제 버튼 */
+
+.header-right {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-register,
+.btn-save {
+  background-color: #111;
+  color: white;
+  border: none;
+  padding: 10px 30px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #111;
+  transition: background-color 0.2s;
+}
+
+.btn-register:hover,
+.btn-save:hover {
+  background-color: #595959;
+  border: 1px solid #111;
+}
+
+.btn-cancel,
+.btn-edit {
+  background-color: #fff;
+  color: #111;
+  border: none;
+  padding: 10px 30px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #111;
+  transition: background-color 0.2s;
+}
+
+.btn-cancel:hover,
+.btn-edit:hover {
+  background-color: #f4f4f4;
+  color: #111;
+  border: 1px solid #111;
+}

@@ -6,31 +6,6 @@
   background-color: #f8f9fa;
 }
 
-.header-right {
-  display: flex;
-  justify-content: flex-end;
-}
-
-/* 등록 버튼 */
-.btn-register {
-  background-color: #111;
-  color: white;
-  border: none;
-  padding: 10px 30px;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 4px;
-  cursor: pointer;
-  border: 1px solid #111;
-  transition: background-color 0.2s;
-}
-
-.btn-register:hover {
-  background-color: #fff;
-  color: #111;
-  border: 1px solid #111;
-}
-
 /* 테이블 컨테이너 */
 .table-container {
   flex: 1;
