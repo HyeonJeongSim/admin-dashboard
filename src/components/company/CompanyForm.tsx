@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Company, CompanyType } from "../../models/company";
+import {
+  Company,
+  CompanyType,
+  CompanyFormData as CompanyFormDataType,
+} from "../../models/company";
+import { CompanyRegisterModal } from "../modals/CompanyRegist";
+
 import clientsData from "../../data/clients.json";
 
 import "../../styles/common.css";
@@ -12,7 +18,7 @@ interface CompanyFormProps {
 const CompanyForm: React.FC<CompanyFormProps> = ({ onCompanySelect }) => {
   const [checkedCodes, setCheckedCodes] = useState<string[]>([]);
   const [selectedCode, setSelectedCode] = useState<string>("");
-  const [showRegisterModal, setShowRegisterModal] = useState<boolean>(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
 
   const companies: Company[] = [...clientsData]
     .sort((a, b) => a.code.localeCompare(b.code))
@@ -61,19 +67,40 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ onCompanySelect }) => {
     }
   };
 
-  // 등록 버튼 클릭
+  // 등록 버튼 클릭 시 모달 열기
   const handleRegisterClick = () => {
     setShowRegisterModal(true);
-    //  여기서 등록 컴포넌트를 표시하거나 라우팅
+  };
+
+  // 모달 닫기
+  const handleCloseModal = () => {
+    setShowRegisterModal(false);
+  };
+
+  // 새 거래처 저장 처리
+  const handleSaveNewCompany = (newCompany: CompanyFormDataType) => {
+    console.log("새 거래처 등록:", newCompany);
+    alert("거래처가 성공적으로 등록되었습니다.");
   };
 
   return (
     <div className="company-form-container">
       {/* 상단 헤더 영역 */}
       <div className="header-right">
-        <button className="btn-register" onClick={handleRegisterClick}>
+        {/* 등록 버튼 */}
+        <button
+          type="button"
+          onClick={handleRegisterClick}
+          className="btn-register">
           등록
         </button>
+
+        {/* 거래처 등록 모달 */}
+        <CompanyRegisterModal
+          isOpen={showRegisterModal}
+          onClose={handleCloseModal}
+          onSave={handleSaveNewCompany}
+        />
       </div>
 
       {/* 테이블 영역 */}
