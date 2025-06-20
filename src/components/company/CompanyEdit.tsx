@@ -1,22 +1,27 @@
-import React, { useEffect, useState } from "react";
-import type { CompanyFormData, CompanyDetail } from "../../models/company";
+import React, {
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
+import {
+  CompanyFormData as CompanyFormDataType,
+  CompanyDetail as CompanyDetailType,
+} from "../../models/company";
 import "../../styles/components/CompanyDetail.css";
 import "../../styles/components/CompanyEdit.css";
-
-interface CompanyEditProps {
-  company: CompanyDetail | null;
-  onCancel: () => void;
-  onSave: (updatedCompany: CompanyFormData) => void;
-}
 
 const formatWithHyphen = (
   value: string,
   type: "biz" | "personal" | "phone"
 ) => {
   const digits = value.replace(/\D/g, "");
-  if (type === "biz")
+  if (type === "biz") {
     return digits.replace(/^(\d{3})(\d{2})(\d{5})$/, "$1-$2-$3");
-  if (type === "personal") return digits.replace(/^(\d{6})(\d{7})$/, "$1-$2");
+  }
+  if (type === "personal") {
+    return digits.replace(/^(\d{6})(\d{7})$/, "$1-$2");
+  }
   return digits.replace(/^(0\d{1,2})(\d{3,4})(\d{4})$/, "$1-$2-$3");
 };
 
@@ -25,12 +30,21 @@ const formatCurrency = (value: string) => {
   return isNaN(num) ? "" : num.toLocaleString();
 };
 
-const CompanyEdit: React.FC<CompanyEditProps> = ({
-  company,
-  onCancel,
-  onSave,
-}) => {
-  const [formData, setFormData] = useState<CompanyFormData | null>(null);
+interface CompanyEditProps {
+  company: CompanyDetailType | null;
+  onCancel: () => void;
+  onSave: (updatedCompany: CompanyFormDataType) => void;
+}
+
+const CompanyEdit = forwardRef<
+  { getCurrentFormData: () => CompanyFormDataType | null },
+  CompanyEditProps
+>(({ company, onCancel, onSave }, ref) => {
+  const [formData, setFormData] = useState<CompanyFormDataType | null>(null);
+
+  useImperativeHandle(ref, () => ({
+    getCurrentFormData: () => formData,
+  }));
 
   useEffect(() => {
     if (company) {
@@ -38,31 +52,22 @@ const CompanyEdit: React.FC<CompanyEditProps> = ({
         ...company,
         code: company.code ?? "",
         name: company.ceo_name ?? "",
-        type: "매입", // 필요 시 변경
+        type: "매입",
       });
     }
   }, [company]);
 
-  if (!formData) return <div></div>;
+  if (!formData) return <div />;
 
-  const handleChange = (field: keyof CompanyFormData, value: any) => {
+  const handleChange = (field: keyof CompanyFormDataType, value: any) => {
     setFormData({ ...formData, [field]: value });
   };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (formData) onSave(formData);
   };
-
-  // 버튼 핸들러들 (실제 기능 없음)
-  const handleBusinessRegistrationCheck = () => {
-    console.log("사업자등록상태조회 클릭");
-  };
-
-  const handleZipcodeSearch = () => {
-    console.log("우편번호 검색 클릭");
-  };
-
+  const handleBusinessRegistrationCheck = () => {};
+  const handleZipcodeSearch = () => {};
   return (
     <form className="company-detail-form" onSubmit={handleSubmit}>
       <table className="company-detail">
@@ -103,22 +108,22 @@ const CompanyEdit: React.FC<CompanyEditProps> = ({
                 <label>
                   <input
                     type="radio"
-                    name="is_active"
+                    name="resident_type"
                     value="true"
-                    checked={formData.is_active === true}
-                    onChange={(e) => handleChange("is_active", true)}
+                    checked={formData.resident_type === true}
+                    onChange={(e) => handleChange("resident_type", true)}
                   />
-                  부
+                  여
                 </label>
                 <label>
                   <input
                     type="radio"
-                    name="is_active"
+                    name="resident_type"
                     value="false"
-                    checked={formData.is_active === false}
-                    onChange={(e) => handleChange("is_active", false)}
+                    checked={formData.resident_type === false}
+                    onChange={(e) => handleChange("resident_type", false)}
                   />
-                  여
+                  부
                 </label>
               </div>
             </td>
@@ -259,14 +264,14 @@ const CompanyEdit: React.FC<CompanyEditProps> = ({
             <td colSpan={3}>
               <div className="liquor-code-group">
                 <input
-                  value=""
-                  onChange={(e) => console.log("주류코드1:", e.target.value)}
-                  placeholder="주류코드 1"
+                  value={formData.product_code || ""}
+                  onChange={(e) => handleChange("product_code", e.target.value)}
+                  placeholder="주류코드"
                 />
                 <input
-                  value=""
-                  onChange={(e) => console.log("주류코드2:", e.target.value)}
-                  placeholder="주류코드 2"
+                  value={formData.product_name || ""}
+                  onChange={(e) => handleChange("product_name", e.target.value)}
+                  placeholder="주류명"
                 />
               </div>
             </td>
@@ -371,20 +376,22 @@ const CompanyEdit: React.FC<CompanyEditProps> = ({
                 <label>
                   <input
                     type="radio"
-                    name="usage_status"
+                    name="is_active"
                     value="true"
-                    onChange={(e) => console.log("사용여부:", true)}
+                    checked={formData.is_active === true}
+                    onChange={(e) => handleChange("is_active", true)}
                   />
-                  부
+                  여
                 </label>
                 <label>
                   <input
                     type="radio"
-                    name="usage_status"
+                    name="is_active"
                     value="false"
-                    onChange={(e) => console.log("사용여부:", false)}
+                    checked={formData.is_active === false}
+                    onChange={(e) => handleChange("is_active", false)}
                   />
-                  여
+                  부
                 </label>
               </div>
             </td>
@@ -393,6 +400,8 @@ const CompanyEdit: React.FC<CompanyEditProps> = ({
       </table>
     </form>
   );
-};
+});
+
+CompanyEdit.displayName = "CompanyEdit";
 
 export default CompanyEdit;

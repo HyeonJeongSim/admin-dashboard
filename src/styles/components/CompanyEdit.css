@@ -1,9 +1,5 @@
 /* CompanyEdit.css */
 
-.company-detail tr td:nth-child(odd) {
-  width: 200px;
-}
-
 .company-detail-form {
   width: 100%;
   max-width: 1200px;
@@ -13,18 +9,7 @@
   padding-right: 10px;
   scrollbar-width: thin;
   scrollbar-color: #ababab #ddd;
-}
-
-.company-detail {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1px solid #ddd;
-}
-
-.company-detail td {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  vertical-align: middle;
+  margin-top: 20px;
 }
 
 .company-detail td:first-child {
@@ -123,6 +108,7 @@
 .radio-group input[type="radio"] {
   width: auto;
   margin: 0;
+  accent-color: #111;
 }
 
 /* 부서/담당자 */

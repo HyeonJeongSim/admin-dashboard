@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { User, LogOut } from "lucide-react";
 
 import GNB from "./layout/GNB";
 import CompanyForm from "./components/company/CompanyForm";
 import CompanyDetail from "./components/company/CompanyDetail";
-import CompanyEdit from "./components/company/CompanyEdit";
 
 import {
   CompanyDetail as CompanyDetailType,
@@ -12,34 +11,67 @@ import {
 } from "./models/company";
 
 import menuData from "./data/tree.json";
-import clients from "./data/clients.json";
-import companies from "./data/companies.json";
+import clientsData from "./data/clients.json";
+import companiesData from "./data/companies.json";
 
 import "./App.css";
 import "./styles/common.css";
 import "./styles/components/CompanyForm.css";
 
 function App() {
+  // 메뉴와 UI 상태 관리
   const [selectedMenuId, setSelectedMenuId] = useState<number>(14);
   const [showGNB, setShowGNB] = useState<boolean>(true);
   const [selectedClientCode, setSelectedClientCode] = useState<string | null>(
     null
   );
-
   const [mode, setMode] = useState<"view" | "edit">("view");
 
+  // 데이터 상태 관리 (localStorage와 연동)
+  const [clients, setClients] = useState<any[]>([]);
+  const [companies, setCompanies] = useState<any[]>([]);
+
+  // 컴포넌트 마운트 시 데이터 초기화
+  useEffect(() => {
+    try {
+      const savedClients = localStorage.getItem("clients");
+      const savedCompanies = localStorage.getItem("companies");
+
+      // 저장된 데이터가 있으면 불러오고, 없으면 기본 데이터 사용
+      if (savedClients) {
+        setClients(JSON.parse(savedClients));
+      } else {
+        setClients(clientsData);
+        localStorage.setItem("clients", JSON.stringify(clientsData));
+      }
+
+      if (savedCompanies) {
+        setCompanies(JSON.parse(savedCompanies));
+      } else {
+        setCompanies(companiesData);
+        localStorage.setItem("companies", JSON.stringify(companiesData));
+      }
+    } catch (error) {
+      // 에러 발생 시 기본 데이터로 복구
+      setClients(clientsData);
+      setCompanies(companiesData);
+    }
+  }, []);
+
+  // 메뉴 선택 핸들러
   const handleMenuSelect = (menuId: number) => {
     setSelectedMenuId(menuId);
     setMode("view");
     setSelectedClientCode(null);
   };
 
-  // CompanyForm에서 선택된 client의 "code"를 기준으로 저장
+  // 회사 선택 핸들러
   const handleCompanySelect = (companyCode: string) => {
     setSelectedClientCode(companyCode);
     setMode("view");
   };
 
+  // 수정 모드 핸들러들
   const handleEditClick = () => {
     setMode("edit");
   };
@@ -48,25 +80,52 @@ function App() {
     setMode("view");
   };
 
+  // 데이터 저장 핸들러
   const handleSaveEdit = (updatedCompany: CompanyFormDataType) => {
-    console.log("저장된 회사 정보:", updatedCompany);
+    if (!selectedClientCode) return;
+
+    try {
+      // companies 배열에서 해당 회사를 찾아서 업데이트
+      const updatedCompanies = companies.map((company, index) => {
+        const companyCode = clients[index]?.code ?? "";
+
+        if (companyCode === selectedClientCode) {
+          // 기존 데이터에 새 데이터 덮어쓰기
+          return {
+            ...company,
+            ...updatedCompany,
+            id: company.id, // ID는 기존 것 유지
+          };
+        }
+        return company;
+      });
+
+      // 상태와 localStorage 모두 업데이트
+      setCompanies(updatedCompanies);
+      localStorage.setItem("companies", JSON.stringify(updatedCompanies));
+    } catch (error) {
+      console.error("데이터 저장 에러:", error);
+    }
+
     setMode("view");
   };
 
-  // companies.json에서 code가 같은 항목을 찾음
+  // 선택된 회사의 상세 정보 가져오기
   const getSelectedCompanyDetail = (): CompanyDetailType | null => {
     if (!selectedClientCode) return null;
 
+    // companies와 clients 데이터를 매핑하여 선택된 회사 찾기
     const mappedCompanies: (CompanyDetailType & { code: string })[] =
       companies.map((item, index) => ({
         ...item,
         id: index + 1,
-        code: clients[index]?.code ?? "", // clients.json에서 같은 index의 code 매핑
+        code: clients[index]?.code ?? "",
       }));
 
     return mappedCompanies.find((c) => c.code === selectedClientCode) || null;
   };
 
+  // 메뉴 제목 가져오기
   const getMenuTitle = (menuId: number): string => {
     const findMenu = (menus: any[]): string => {
       for (const menu of menus) {
@@ -82,6 +141,7 @@ function App() {
     return findMenu(menuData) || "관리자 대시보드";
   };
 
+  // 메인 콘텐츠 렌더링
   const renderMainContent = () => {
     switch (selectedMenuId) {
       case 14:
@@ -109,24 +169,22 @@ function App() {
 
   return (
     <div className="app-container">
+      {/* 상단 헤더 바 */}
       <div className="top-bar">
         <h2 className="content-title">{getMenuTitle(selectedMenuId)}</h2>
         <div className="top-bar-actions">
-          <button
-            className="top-bar-btn"
-            onClick={() => console.log("마이페이지 클릭")}>
+          <button className="top-bar-btn">
             <User size={16} />
             <span>마이페이지</span>
           </button>
-          <button
-            className="top-bar-btn"
-            onClick={() => console.log("로그아웃 클릭")}>
+          <button className="top-bar-btn">
             <LogOut size={16} />
             <span>로그아웃</span>
           </button>
         </div>
       </div>
 
+      {/* 메인 레이아웃 */}
       <div className="app-layout">
         <GNB
           isOpen={showGNB}

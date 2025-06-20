@@ -6,29 +6,30 @@
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 14px;
   color: #333;
-  margin-top: 20px;
+}
+
+.company-detail tbody {
 }
 
 .company-detail td {
-  border: 1px solid #dcdcdc;
-  padding: 10px 12px;
-  vertical-align: middle;
   word-break: break-word;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  vertical-align: middle;
+  height: 60px;
 }
 
 .company-detail tr td:nth-child(odd) {
   background-color: #f4f4f4;
   font-weight: 500;
   color: #777;
-  /* width: 180px;
-  min-width: 120px; */
+  width: 200px;
 }
 
 .company-detail tr td:nth-child(even) {
   background-color: #fff;
-  /* width: 35%; */
+  font-weight: 500;
 }
 
 .company-detail td[colspan="3"] {

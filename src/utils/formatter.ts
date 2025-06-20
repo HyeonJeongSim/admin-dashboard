@@ -18,9 +18,23 @@ export const formatWithHyphen = (
   }
 };
 
-export const formatCurrency = (value: string | number) => {
-  const num = typeof value === "string" ? parseFloat(value) : value;
-  return isNaN(num) ? value : num.toLocaleString("ko-KR");
+// utils/formatter.ts
+export const formatCurrency = (
+  value: string | number | null | undefined
+): string => {
+  if (value === null || value === undefined) {
+    return "0";
+  }
+
+  // 모든 타입을 문자열로 변환
+  const stringValue = String(value);
+
+  // 숫자만 추출
+  const digits = stringValue.replace(/\D/g, "");
+
+  // 숫자로 변환 후 포맷팅
+  const num = parseInt(digits, 10);
+  return isNaN(num) ? "0" : num.toLocaleString();
 };
 
 export const formatBoolean = (value: boolean | string | number) => {

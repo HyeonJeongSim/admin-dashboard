@@ -1,6 +1,5 @@
 /* 컨테이너 */
 .company-form-container {
-  height: 850px;
   display: flex;
   flex-direction: column;
   background-color: #f8f9fa;

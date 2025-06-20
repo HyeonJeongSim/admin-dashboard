@@ -59,11 +59,12 @@ export interface CompanyDetail {
 
   // 기타
   note: string; // 비고
-  is_active: boolean; // 주민기재분
+  is_active: boolean; //사용여부
+  resident_type: boolean; // 주민기재분
 
-  // 상품 정보 (선택적)
-  product_code?: string; // 상품코드
-  product_name?: string; // 상품명
+  // 주류코드
+  product_code?: string; // 주류코드
+  product_name?: string;
 }
 
 // 거래처 폼 데이터 (등록/수정시 사용)
@@ -114,9 +115,10 @@ export interface CompanyFormData {
 
   // 기타
   note?: string;
-  is_active?: boolean;
+  is_active?: boolean; //사용여부
+  resident_type: boolean; // 주민기재분
 
-  // 상품 정보
+  // 주류코드
   product_code?: string;
   product_name?: string;
 }
