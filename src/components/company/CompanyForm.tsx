@@ -6,53 +6,39 @@ import {
 } from "../../models/company";
 import { CompanyRegisterModal } from "../modals/CompanyRegist";
 
-import clientsData from "../../data/clients.json";
-
 import "../../styles/common.css";
 import "../../styles/components/CompanyForm.css";
 
 interface CompanyFormProps {
   onCompanySelect: (companyCode: string) => void;
+  onRegisterNew: (newCompany: CompanyFormDataType) => void; // 등록 함수
+  clients: any[]; // 실시간 데이터
 }
 
-const CompanyForm: React.FC<CompanyFormProps> = ({ onCompanySelect }) => {
-  const [checkedCodes, setCheckedCodes] = useState<string[]>([]);
+const CompanyForm: React.FC<CompanyFormProps> = ({
+  onCompanySelect,
+  onRegisterNew,
+  clients,
+}) => {
   const [selectedCode, setSelectedCode] = useState<string>("");
   const [showRegisterModal, setShowRegisterModal] = useState(false);
 
-  const companies: Company[] = [...clientsData]
+  // 실시간 업데이트됨
+  const companies: Company[] = [...clients]
+    .filter((item) => item && item.code) // 빈 데이터 제거
     .sort((a, b) => a.code.localeCompare(b.code))
     .map((item, index, array) => ({
-      id: item.code,
-      no: array.length - index, // 내림차순 부여
-      code: item.code,
-      brn: item.brn,
-      name: item.name,
-      type: item.type as CompanyType,
+      id: item.code || `temp-${index}`,
+      no: array.length - index,
+      code: item.code || `${index + 1}`.padStart(3, "0"),
+      brn: item.brn || "",
+      name: item.name || "이름없음",
+      type: (item.type as CompanyType) || "매입",
     }));
 
   const handleRowClick = (company: Company) => {
     setSelectedCode(company.code);
-    // onCompanySelect(Number(company.id));
     onCompanySelect(company.code);
-  };
-
-  // 전체 선택/해제
-  const toggleAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
-      setCheckedCodes(companies.map((c) => c.code));
-    } else {
-      setCheckedCodes([]);
-    }
-  };
-
-  // 개별 선택/해제
-  const toggleItem = (code: string) => {
-    if (checkedCodes.includes(code)) {
-      setCheckedCodes(checkedCodes.filter((c) => c !== code));
-    } else {
-      setCheckedCodes([...checkedCodes, code]);
-    }
   };
 
   // 유형별 배지 클래스
@@ -63,62 +49,35 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ onCompanySelect }) => {
       case "매출":
         return "badge-sales";
       default:
-        return "badge-both"; // 동시
+        return "badge-both";
     }
   };
 
-  // 등록 버튼 클릭 시 모달 열기
-  const handleRegisterClick = () => {
-    setShowRegisterModal(true);
-  };
-
-  // 모달 닫기
-  const handleCloseModal = () => {
-    setShowRegisterModal(false);
-  };
-
-  // 새 거래처 저장 처리
+  // 등록 처리
   const handleSaveNewCompany = (newCompany: CompanyFormDataType) => {
-    console.log("새 거래처 등록:", newCompany);
-    alert("거래처가 성공적으로 등록되었습니다.");
+    onRegisterNew(newCompany);
+    setShowRegisterModal(false);
+    alert("거래처가 등록되었습니다!");
   };
 
   return (
     <div className="company-form-container">
-      {/* 상단 헤더 영역 */}
+      {/* 등록 버튼 */}
       <div className="header-right">
-        {/* 등록 버튼 */}
         <button
           type="button"
-          onClick={handleRegisterClick}
+          onClick={() => setShowRegisterModal(true)}
           className="btn-register">
           등록
         </button>
-
-        {/* 거래처 등록 모달 */}
-        <CompanyRegisterModal
-          isOpen={showRegisterModal}
-          onClose={handleCloseModal}
-          onSave={handleSaveNewCompany}
-        />
       </div>
 
-      {/* 테이블 영역 */}
+      {/* 테이블 */}
       <div className="table-container">
         <table className="company-table">
           <thead>
             <tr>
               <th className="th-no">No</th>
-              <th className="th-checkbox">
-                <input
-                  type="checkbox"
-                  checked={
-                    checkedCodes.length === companies.length &&
-                    companies.length > 0
-                  }
-                  onChange={toggleAll}
-                />
-              </th>
               <th className="th-code">코드</th>
               <th className="th-name">거래처명</th>
               <th className="th-brn">등록번호</th>
@@ -126,20 +85,12 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ onCompanySelect }) => {
             </tr>
           </thead>
           <tbody>
-            {companies.map((company) => (
+            {companies.map((company, index) => (
               <tr
-                key={company.code}
+                key={`${company.code}-${index}`}
                 className={selectedCode === company.code ? "selected" : ""}
                 onClick={() => handleRowClick(company)}>
                 <td className="td-no">{company.no}</td>
-                <td className="td-checkbox">
-                  <input
-                    type="checkbox"
-                    checked={checkedCodes.includes(company.code)}
-                    onChange={() => toggleItem(company.code)}
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                </td>
                 <td className="td-code">{company.code}</td>
                 <td className="td-name">{company.name}</td>
                 <td className="td-brn">{company.brn}</td>
@@ -155,13 +106,14 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ onCompanySelect }) => {
         </table>
       </div>
 
-      {/* 등록 모달 컴포넌트를 여기에 추가 */}
-      {showRegisterModal && (
-        <div style={{ display: "none" }}>
-          {/* <CompanyRegisterModal onClose={() => setShowRegisterModal(false)} /> */}
-        </div>
-      )}
+      {/* 등록 모달 */}
+      <CompanyRegisterModal
+        isOpen={showRegisterModal}
+        onClose={() => setShowRegisterModal(false)}
+        onSave={handleSaveNewCompany}
+      />
     </div>
   );
 };
+
 export default CompanyForm;

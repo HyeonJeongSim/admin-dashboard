@@ -37,7 +37,6 @@ function App() {
       const savedClients = localStorage.getItem("clients");
       const savedCompanies = localStorage.getItem("companies");
 
-      // 저장된 데이터가 있으면 불러오고, 없으면 기본 데이터 사용
       if (savedClients) {
         setClients(JSON.parse(savedClients));
       } else {
@@ -52,11 +51,52 @@ function App() {
         localStorage.setItem("companies", JSON.stringify(companiesData));
       }
     } catch (error) {
-      // 에러 발생 시 기본 데이터로 복구
       setClients(clientsData);
       setCompanies(companiesData);
     }
   }, []);
+
+  // 새 회사 등록 함수
+  const addNewCompany = (newCompanyData: CompanyFormDataType) => {
+    // 1. 새 코드 생성
+    const existingCodes = clients
+      .map((c) => parseInt(c.code))
+      .filter((code) => !isNaN(code));
+
+    const newCodeNumber =
+      existingCodes.length > 0 ? Math.max(...existingCodes) + 1 : 1;
+    const newCode = newCodeNumber.toString().padStart(3, "0"); // 001, 002, 003...
+
+    // 2. 새 클라이언트 추가
+    const newClient = {
+      code: newCode,
+      name: newCompanyData.name || "이름없음", // 기본값 설정
+      type: newCompanyData.type || "매입",
+      brn: newCompanyData.brn || "",
+    };
+
+    // 3. 새 회사 상세정보 추가
+    const newCompany = {
+      ...newCompanyData,
+      id: companies.length + 1,
+      code: newCode,
+    };
+
+    // 4. 상태 업데이트
+    const newClients = [...clients, newClient];
+    const newCompanies = [...companies, newCompany];
+
+    setClients(newClients);
+    setCompanies(newCompanies);
+
+    // 5. localStorage 저장
+    localStorage.setItem("clients", JSON.stringify(newClients));
+    localStorage.setItem("companies", JSON.stringify(newCompanies));
+
+    // 6. 등록된 회사 선택
+    setSelectedClientCode(newCode);
+    setMode("view");
+  };
 
   // 메뉴 선택 핸들러
   const handleMenuSelect = (menuId: number) => {
@@ -80,28 +120,33 @@ function App() {
     setMode("view");
   };
 
-  // 데이터 저장 핸들러
+  // 수정 저장 핸들러
   const handleSaveEdit = (updatedCompany: CompanyFormDataType) => {
     if (!selectedClientCode) return;
 
     try {
-      // companies 배열에서 해당 회사를 찾아서 업데이트
       const updatedCompanies = companies.map((company, index) => {
         const companyCode = clients[index]?.code ?? "";
-
         if (companyCode === selectedClientCode) {
-          // 기존 데이터에 새 데이터 덮어쓰기
-          return {
-            ...company,
-            ...updatedCompany,
-            id: company.id, // ID는 기존 것 유지
-          };
+          return { ...company, ...updatedCompany, id: company.id };
         }
         return company;
       });
 
-      // 상태와 localStorage 모두 업데이트
+      const updatedClients = clients.map((client) => {
+        if (client.code === selectedClientCode) {
+          return {
+            ...client,
+            name: updatedCompany.name,
+            type: updatedCompany.type,
+          };
+        }
+        return client;
+      });
+
+      setClients(updatedClients);
       setCompanies(updatedCompanies);
+      localStorage.setItem("clients", JSON.stringify(updatedClients));
       localStorage.setItem("companies", JSON.stringify(updatedCompanies));
     } catch (error) {
       console.error("데이터 저장 에러:", error);
@@ -114,7 +159,6 @@ function App() {
   const getSelectedCompanyDetail = (): CompanyDetailType | null => {
     if (!selectedClientCode) return null;
 
-    // companies와 clients 데이터를 매핑하여 선택된 회사 찾기
     const mappedCompanies: (CompanyDetailType & { code: string })[] =
       companies.map((item, index) => ({
         ...item,
@@ -137,7 +181,6 @@ function App() {
       }
       return "";
     };
-
     return findMenu(menuData) || "관리자 대시보드";
   };
 
@@ -148,7 +191,11 @@ function App() {
         return (
           <div className="company-layout">
             <div className="company-form">
-              <CompanyForm onCompanySelect={handleCompanySelect} />
+              <CompanyForm
+                onCompanySelect={handleCompanySelect}
+                onRegisterNew={addNewCompany}
+                clients={clients}
+              />
             </div>
             <div className="company-detail-wrap">
               <CompanyDetail
@@ -161,7 +208,6 @@ function App() {
             </div>
           </div>
         );
-
       default:
         return <div></div>;
     }
@@ -169,7 +215,6 @@ function App() {
 
   return (
     <div className="app-container">
-      {/* 상단 헤더 바 */}
       <div className="top-bar">
         <h2 className="content-title">{getMenuTitle(selectedMenuId)}</h2>
         <div className="top-bar-actions">
@@ -184,7 +229,6 @@ function App() {
         </div>
       </div>
 
-      {/* 메인 레이아웃 */}
       <div className="app-layout">
         <GNB
           isOpen={showGNB}
