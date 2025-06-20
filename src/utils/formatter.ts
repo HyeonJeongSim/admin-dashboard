@@ -1,3 +1,5 @@
+// src/utils/formatter.ts
+
 export const formatWithHyphen = (
   value: string,
   type: "biz" | "personal" | "phone"
@@ -18,7 +20,6 @@ export const formatWithHyphen = (
   }
 };
 
-// utils/formatter.ts
 export const formatCurrency = (
   value: string | number | null | undefined
 ): string => {

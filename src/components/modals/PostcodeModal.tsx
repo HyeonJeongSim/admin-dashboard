@@ -1,10 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import "../../styles/components/Modal.css";
-import {
-  PostcodeSearchRequest,
-  PostcodeResult,
-  PostcodeSearchResponse,
-} from "../../models/company";
+import { PostcodeResult } from "../../models/company";
 
 declare global {
   interface Window {

@@ -6,11 +6,7 @@ export type {
   Company,
   CompanyDetail,
   CompanyFormData,
-  BusinessStatus,
-  BusinessStatusResponse,
-  PostcodeSearchRequest,
   PostcodeResult,
-  PostcodeSearchResponse,
 } from "./company";
 
 // 공통 타입들

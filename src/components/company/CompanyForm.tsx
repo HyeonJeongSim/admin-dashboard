@@ -25,7 +25,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
 
   // 실시간 업데이트됨
   const companies: Company[] = [...clients]
-    .filter((item) => item && item.code) // 빈 데이터 제거
+    .filter((item) => item && item.code)
     .sort((a, b) => a.code.localeCompare(b.code))
     .map((item, index, array) => ({
       id: item.code || `temp-${index}`,

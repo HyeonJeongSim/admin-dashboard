@@ -73,7 +73,9 @@ const CompanyEdit = forwardRef<
       <table className="company-detail">
         <tbody>
           <tr>
-            <td>사업자등록번호*</td>
+            <td>
+              사업자등록번호<span>*</span>
+            </td>
             <td colSpan={3}>
               <div className="input-with-button">
                 <input
@@ -90,7 +92,9 @@ const CompanyEdit = forwardRef<
             </td>
           </tr>
           <tr>
-            <td>주민등록번호*</td>
+            <td>
+              주민등록번호<span>*</span>
+            </td>
             <td>
               <input
                 value={formatWithHyphen(
@@ -102,7 +106,9 @@ const CompanyEdit = forwardRef<
                 }
               />
             </td>
-            <td>주민기재분*</td>
+            <td>
+              주민기재분<span>*</span>
+            </td>
             <td>
               <div className="radio-group">
                 <label>
@@ -129,14 +135,18 @@ const CompanyEdit = forwardRef<
             </td>
           </tr>
           <tr>
-            <td>대표자 성명*</td>
+            <td>
+              대표자 성명<span>*</span>
+            </td>
             <td>
               <input
                 value={formData.ceo_name || ""}
                 onChange={(e) => handleChange("ceo_name", e.target.value)}
               />
             </td>
-            <td>종 사업장 번호*</td>
+            <td>
+              종 사업장 번호<span>*</span>
+            </td>
             <td>
               <input
                 type="text"
@@ -148,14 +158,18 @@ const CompanyEdit = forwardRef<
             </td>
           </tr>
           <tr>
-            <td>업종*</td>
+            <td>
+              업종<span>*</span>
+            </td>
             <td>
               <input
                 value={formData.business_type || ""}
                 onChange={(e) => handleChange("business_type", e.target.value)}
               />
             </td>
-            <td>종목*</td>
+            <td>
+              종목<span>*</span>
+            </td>
             <td>
               <input
                 value={formData.item || ""}
@@ -164,7 +178,9 @@ const CompanyEdit = forwardRef<
             </td>
           </tr>
           <tr>
-            <td>주소*</td>
+            <td>
+              주소<span>*</span>
+            </td>
             <td colSpan={3}>
               <div className="address-group">
                 <div className="zipcode-row">

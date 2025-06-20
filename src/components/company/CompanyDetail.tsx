@@ -1,4 +1,4 @@
-import React, { useRef } from "react"; // useRef 추가
+import React, { useRef } from "react";
 import type { CompanyDetail as CompanyDetailType } from "../../models/company";
 import CompanyEdit from "./CompanyEdit";
 import {
@@ -25,7 +25,7 @@ const CompanyDetail = ({
   onCancelEdit,
   onSaveEdit,
 }: Props) => {
-  // CompanyEdit 컴포넌트의 ref를 생성 (수정된 데이터를 가져오기 위해)
+  // 수정된 데이터를 불러오기
   const companyEditRef = useRef<any>(null);
 
   if (!company) return <div></div>;
@@ -44,7 +44,7 @@ const CompanyDetail = ({
 
   // 저장 처리 - 수정된 데이터를 가져와서 전달
   const handleSaveEdit = () => {
-    // CompanyEdit의 ref를 통해 현재 수정된 formData를 가져옴
+    // 수정된 formData를 가져옴
     const currentFormData = companyEditRef.current?.getCurrentFormData();
 
     if (currentFormData) {
@@ -79,7 +79,7 @@ const CompanyDetail = ({
 
       {mode === "edit" ? (
         <CompanyEdit
-          ref={companyEditRef} // ref 연결
+          ref={companyEditRef}
           company={company}
           onCancel={handleCancelEdit}
           onSave={handleSaveEdit}

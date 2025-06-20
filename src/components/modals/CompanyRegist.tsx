@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { CompanyFormData as CompanyFormDataType } from "../../models/company";
 import PostcodeModal from "./PostcodeModal";
-import {
-  PostcodeSearchRequest,
-  PostcodeResult,
-  PostcodeSearchResponse,
-} from "../../models/company";
+import { PostcodeResult } from "../../models/company";
 import "../../styles/common.css";
 import "../../styles/components/CompanyDetail.css";
 import "../../styles/components/CompanyEdit.css";
@@ -92,7 +88,9 @@ const CompanyRegist: React.FC<{
         <table className="company-detail">
           <tbody>
             <tr>
-              <td>사업자등록번호*</td>
+              <td>
+                사업자등록번호<span>*</span>
+              </td>
               <td colSpan={3}>
                 <div className="input-with-button">
                   <input
@@ -113,7 +111,9 @@ const CompanyRegist: React.FC<{
             </tr>
 
             <tr>
-              <td>주민등록번호*</td>
+              <td>
+                주민등록번호<span>*</span>
+              </td>
               <td>
                 <input
                   value={formatWithHyphen(
@@ -126,7 +126,9 @@ const CompanyRegist: React.FC<{
                   placeholder="주민등록번호를 입력하세요"
                 />
               </td>
-              <td>주민기재분*</td>
+              <td>
+                주민기재분<span>*</span>
+              </td>
               <td>
                 <div className="radio-group">
                   <label>
@@ -154,7 +156,9 @@ const CompanyRegist: React.FC<{
             </tr>
 
             <tr>
-              <td>대표자 성명*</td>
+              <td>
+                대표자 성명<span>*</span>
+              </td>
               <td>
                 <input
                   value={formData.ceo_name || ""}
@@ -162,7 +166,9 @@ const CompanyRegist: React.FC<{
                   placeholder="대표자 성명을 입력하세요"
                 />
               </td>
-              <td>종 사업장 번호*</td>
+              <td>
+                종 사업장 번호<span>*</span>
+              </td>
               <td>
                 <input
                   value={formData.sub_business_number || ""}
@@ -175,7 +181,9 @@ const CompanyRegist: React.FC<{
             </tr>
 
             <tr>
-              <td>업종*</td>
+              <td>
+                업종<span>*</span>
+              </td>
               <td>
                 <input
                   value={formData.business_type || ""}
@@ -185,7 +193,9 @@ const CompanyRegist: React.FC<{
                   placeholder="업종을 입력하세요"
                 />
               </td>
-              <td>종목*</td>
+              <td>
+                종목<span>*</span>
+              </td>
               <td>
                 <input
                   value={formData.item || ""}
@@ -196,7 +206,9 @@ const CompanyRegist: React.FC<{
             </tr>
 
             <tr>
-              <td>주소*</td>
+              <td>
+                주소<span>*</span>
+              </td>
               <td colSpan={3}>
                 <div className="address-group">
                   <div className="zipcode-row">

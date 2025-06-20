@@ -148,7 +148,7 @@
 .postcode-modal-close-btn {
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 30px;
   cursor: pointer;
   padding: 4px 8px;
   width: 28px;
@@ -162,7 +162,6 @@
 }
 
 .postcode-modal-close-btn:hover {
-  background-color: #e9ecef;
   color: #333;
 }
 
