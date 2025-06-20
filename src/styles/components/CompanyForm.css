@@ -10,7 +10,7 @@
 .table-container {
   flex: 1;
   overflow: auto;
-  max-height: 800px;
+  max-height: 80vh;
   margin-top: 20px;
   border: 1px solid #ddd;
   scrollbar-width: thin;
