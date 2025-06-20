@@ -1,3 +1,5 @@
+// 거래처 목록 화면
+
 import React, { useState } from "react";
 import {
   Company,
@@ -23,6 +25,9 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
   const [selectedCode, setSelectedCode] = useState<string>("");
   const [showRegisterModal, setShowRegisterModal] = useState(false);
 
+  // 체크박스 상태 관리 - 선택된 회사 코드들을 배열로 저장
+  const [checkedItems, setCheckedItems] = useState<string[]>([]);
+
   // 실시간 업데이트됨
   const companies: Company[] = [...clients]
     .filter((item) => item && item.code)
@@ -40,6 +45,33 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
     setSelectedCode(company.code);
     onCompanySelect(company.code);
   };
+
+  // 개별 체크박스 클릭 처리
+  const handleCheckboxChange = (companyCode: string) => {
+    setCheckedItems((prev) => {
+      // 이미 체크되어 있으면 제거, 없으면 추가
+      if (prev.includes(companyCode)) {
+        return prev.filter((code) => code !== companyCode);
+      } else {
+        return [...prev, companyCode];
+      }
+    });
+  };
+
+  // 전체 선택/해제 처리
+  const handleSelectAll = () => {
+    if (checkedItems.length === companies.length) {
+      // 모든 항목이 선택되어 있으면 전체 해제
+      setCheckedItems([]);
+    } else {
+      // 전체 선택
+      setCheckedItems(companies.map((company) => company.code));
+    }
+  };
+
+  // 전체 선택 여부 확인 (헤더 체크박스의 상태 결정)
+  const isAllSelected =
+    companies.length > 0 && checkedItems.length === companies.length;
 
   // 유형별 배지 클래스
   const getTypeBadgeClass = (type: CompanyType): string => {
@@ -78,6 +110,14 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
           <thead>
             <tr>
               <th className="th-no">No</th>
+              <th className="th-checkbox">
+                {/* 전체 선택 체크박스 */}
+                <input
+                  type="checkbox"
+                  checked={isAllSelected}
+                  onChange={handleSelectAll}
+                />
+              </th>
               <th className="th-code">코드</th>
               <th className="th-name">거래처명</th>
               <th className="th-brn">등록번호</th>
@@ -91,6 +131,15 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
                 className={selectedCode === company.code ? "selected" : ""}
                 onClick={() => handleRowClick(company)}>
                 <td className="td-no">{company.no}</td>
+                <td className="td-checkbox">
+                  {/* 개별 체크박스 */}
+                  <input
+                    type="checkbox"
+                    checked={checkedItems.includes(company.code)}
+                    onChange={() => handleCheckboxChange(company.code)}
+                    onClick={(e) => e.stopPropagation()} // 행 클릭과 충돌 방지
+                  />
+                </td>
                 <td className="td-code">{company.code}</td>
                 <td className="td-name">{company.name}</td>
                 <td className="td-brn">{company.brn}</td>

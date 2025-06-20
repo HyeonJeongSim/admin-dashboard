@@ -1,3 +1,5 @@
+// 거래처 등록-조회 화면
+
 import React, { useRef } from "react";
 import type { CompanyDetail as CompanyDetailType } from "../../models/company";
 import CompanyEdit from "./CompanyEdit";

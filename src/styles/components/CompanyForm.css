@@ -1,36 +1,33 @@
 /* CompanyForm.css */
 
-/* 컨테이너 */
 .company-form-container {
   display: flex;
   flex-direction: column;
   background-color: #f8f9fa;
 }
 
-/* 테이블 컨테이너 */
 .table-container {
   flex: 1;
   overflow: auto;
   max-height: 80vh;
   margin-top: 20px;
-  border: 1px solid #ddd;
   scrollbar-width: thin;
   scrollbar-color: #ababab #ddd;
+  padding-right: 10px;
 }
 
-/* 테이블 스타일 */
 .company-table {
   width: 100%;
   background-color: white;
   border-collapse: collapse;
 }
 
-/* 테이블 헤더 */
 .company-table thead {
   background-color: #f4f4f4;
   position: sticky;
   top: 0;
-  z-index: 10;
+}
+.company-table tr {
 }
 
 .company-table th {
@@ -42,7 +39,6 @@
   white-space: nowrap;
 }
 
-/* 테이블 바디 */
 .company-table tbody tr {
   cursor: pointer;
   transition: background-color 0.1s;
@@ -63,7 +59,6 @@
   border: 1px solid #ddd;
 }
 
-/* 컬럼별 너비 설정 */
 .th-no,
 .td-no {
   width: 60px;

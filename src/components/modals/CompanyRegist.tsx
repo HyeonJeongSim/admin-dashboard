@@ -1,3 +1,5 @@
+// 거래처 등록-신규 등록 화면
+
 import React, { useState } from "react";
 import { CompanyFormData as CompanyFormDataType } from "../../models/company";
 import PostcodeModal from "./PostcodeModal";

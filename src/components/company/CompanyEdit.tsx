@@ -1,3 +1,5 @@
+// 거래처 등록-수정 화면
+
 import React, {
   useEffect,
   useState,

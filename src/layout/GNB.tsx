@@ -1,3 +1,5 @@
+//GNB 화면
+
 import React, { useState, useEffect } from "react";
 import {
   ChevronDown,
@@ -12,8 +14,6 @@ import {
   Shield,
   Briefcase,
   Menu,
-  User,
-  LogOut,
 } from "lucide-react";
 import menuData from "../data/tree.json";
 import "../styles/components/GNB.css";
@@ -201,13 +201,11 @@ const GNB: React.FC<GNBProps> = ({
         </div>
 
         {/* 하위 메뉴 렌더링 */}
-        {!isCollapsed &&
-          hasChildren &&
-          isExpanded && ( // isCollapsed 체크 추가
-            <div className="childList">
-              {menu.children?.map((child: any) => renderMenuItem(child))}
-            </div>
-          )}
+        {!isCollapsed && hasChildren && isExpanded && (
+          <div className="childList">
+            {menu.children?.map((child: any) => renderMenuItem(child))}
+          </div>
+        )}
       </div>
     );
   };

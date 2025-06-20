@@ -1,3 +1,5 @@
+// Kakao Postcode API 화면
+
 import React, { useEffect, useRef } from "react";
 import "../../styles/components/Modal.css";
 import { PostcodeResult } from "../../models/company";
